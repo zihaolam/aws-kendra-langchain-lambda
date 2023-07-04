@@ -92,15 +92,14 @@ def build_response(body: dict, status_code=200):
         "body": json.dumps(body)
     }
 
-def lambda_function(event, context):
-    _question = json.loads(event["body"])["question"]
+def inference_handler(question: str):
     qa = build_chain()
         
-    result = run_chain(qa, _question, [])
+    result = run_chain(qa, question, [])
 
     sources = []
     if "source_documents" in result:
         for d in result["source_documents"]:
             sources.append(d.metadata["source"])
     
-    return build_response({"answer":result["answer"], "sources": sources})
+    return dict(answer=result["answer"], sources=sources)
