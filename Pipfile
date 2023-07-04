@@ -7,6 +7,7 @@ name = "pypi"
 langchain = "*"
 boto3 = "*"
 pydantic = "*"
+fastapi = {extras = ["all"], version = "*"}
 
 [dev-packages]
 
