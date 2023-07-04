@@ -10,7 +10,11 @@ RUN ls
 
 RUN pip install -r requirements.txt -t .
 
+RUN rm -rf numexpr
+
 RUN rm -rf numpy*
+
+RUN rm -rf boto*
 
 RUN zip -r package.zip *
 
