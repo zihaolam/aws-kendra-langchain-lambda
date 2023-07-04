@@ -10,10 +10,6 @@ RUN ls
 
 RUN pip install -r requirements.txt -t .
 
-RUN rm -rf numexpr*
-
-RUN pip install numexpr==2.8.3
-
 RUN rm -rf numpy*
 
 RUN zip -r package.zip *
