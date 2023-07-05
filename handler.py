@@ -2,7 +2,7 @@ import boto3, json
 
 region = "ap-southeast-1"
 kendra_index_id = "dc1992a2-dbd4-4684-90e8-059cfc1551d7"
-endpoint_name = "jumpstart-dft-hf-llm-falcon-7b-bf16"
+endpoint_name = 'jumpstart-dft-hf-llm-falcon-40b-instruct-bf16'
 
 import langchain
 from langchain.chains import ConversationalRetrievalChain
@@ -47,15 +47,15 @@ def build_chain():
     llm = SagemakerEndpoint(
             endpoint_name=endpoint_name,
             region_name="us-east-1",
-            model_kwargs={"max_new_tokens": 300, "return_full_text": True},
+            model_kwargs={"max_new_tokens": 300},
             content_handler=content_handler,
     )
 
     retriever = AmazonKendraRetriever(index_id=kendra_index_id, region_name=region)
 
-    prompt_template = """The following is a friendly conversation between a human and an AI. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it  does not know.
+    prompt_template = """The following is a friendly conversation between a human and an AI named Nadiah. You act in place of the AI. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know. If the user asks questions that require real-time data, it truthly says it does not know.
           {context}
-          Instruction: Based on the above documents, provide a detailed answer for, '{question}'. If not present in the document, answer "don't know"
+          Instruction: If not present in the document, truthfully answer don't know. If the content in the above documents are not relevant, truthfully answer don't know. Based on the document above, Provide a detailed answer for '{question}'.
         Solution:"""
 
     PROMPT = PromptTemplate(
@@ -101,5 +101,5 @@ def inference_handler(question: str):
     if "source_documents" in result:
         for d in result["source_documents"]:
             sources.append(d.metadata["source"])
-    
+    print(result.keys())
     return dict(answer=result["answer"], sources=sources)
