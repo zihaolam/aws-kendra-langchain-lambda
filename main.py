@@ -29,7 +29,7 @@ class SPAStaticFiles(StaticFiles):
             response = await super().get_response('.', scope)
         return response
 
-app.mount('/', SPAStaticFiles(directory='folder', html=True), name='Helpdesk Website')
+app.mount('/', SPAStaticFiles(directory='website', html=True), name='Helpdesk Website')
 
 if __name__ == "__main__":
     uvicorn.run(app, port=80, host="0.0.0.0")
